@@ -3,3 +3,16 @@
 /project/target/
 /target/
 /target/scala-2.12/classes/
+logs
+target
+tmp
+.history
+dist
+/.idea
+/*.iml
+/out
+/.idea_modules
+/.classpath
+/.project
+/RUNNING_PID
+/.settings
