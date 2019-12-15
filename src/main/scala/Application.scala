@@ -1,5 +1,6 @@
 import org.apache.spark.sql.SparkSession
-import org.apache.spark.sql.Encoders
+import org.apache.spark.sql.catalyst.ScalaReflection
+import org.apache.spark.sql.types.StructType
 
 object Application {
   import Models._
@@ -16,13 +17,15 @@ object Application {
       .appName("Testing Spark Session")
       .getOrCreate()
 
-    val monotonSchema = Encoders.product[Monoton].schema
+    val monotonSchema = ScalaReflection.schemaFor[Monoton].dataType.asInstanceOf[StructType]
 
     import spark.implicits._
 
     val path = this.getClass.getResource("monoton.json").getPath
-    val monotonDF = spark.read.schema(monotonSchema).json(path)
+    val monotonDF = spark.read.schema(monotonSchema).json(path).as[Monoton]
 
+    val count = monotonDF.map(a => a.analysis.size)
+    count.show()
     monotonDF.printSchema()
   }
 }
