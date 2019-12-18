@@ -1,6 +1,8 @@
 import Models.{mode, _}
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.functions._
+import vegas._
+import vegas.sparkExt._
 
 object Application {
 
@@ -14,6 +16,8 @@ object Application {
       .config("spark.shuffle.spill.compress",value = false)
       .appName("Testing Spark Session")
       .getOrCreate()
+
+    spark.sparkContext.setLogLevel("ERROR")
 
     import spark.implicits._
 
@@ -33,7 +37,7 @@ object Application {
       array_min($"analysis.avgErrorTime").as("avgErrorTimeMin"),
       avgerage($"analysis.avgErrorTime").as("avgErrorTimesAvg"),
       mode($"analysis.avgErrorTime").as("avgErrorTimeMode"),
-      median($"analysis.avgErrorTime").as("avgErrorTimeMedian"),
+      median($"analysis.avgErrorTime").as("avgErrorTimeMedian")
     ).withColumn("avgErrorTimeRange", $"avgErrorTimeMax" - $"avgErrorTimeMin")
 
     val preErrorTimesDf = monotonDf.select(
@@ -50,5 +54,16 @@ object Application {
     avgErrorTimesDf.show()
     preErrorTimesDf.show()
 
+    val plot = Vegas("Country Pop")
+      .withDataFrame(avgErrorTimesDf)
+      .encodeX("name", Nom)
+      .encodeY("avgErrorTimeMedian", Quant)
+//      .encodeColor("name", Nom)
+      .mark(Bar)
+
+    plot.show
+
+    spark.stop()
   }
+
 }
