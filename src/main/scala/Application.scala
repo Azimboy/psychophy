@@ -1,9 +1,8 @@
+import Models._
 import org.apache.spark.sql.SparkSession
-import org.apache.spark.sql.catalyst.ScalaReflection
-import org.apache.spark.sql.types.StructType
+import org.apache.spark.sql.functions._
 
 object Application {
-  import Models._
 
   def main(args: Array[String]): Unit = {
     val spark = SparkSession
@@ -13,19 +12,32 @@ object Application {
       .config("spark.broadcast.compress", value = false)
       .config("spark.shuffle.compress", value = false)
       .config("spark.shuffle.spill.compress",value = false)
-      .config("spark.serializer", "org.apache.spark.serializer.KryoSerializer")
       .appName("Testing Spark Session")
       .getOrCreate()
-
-    val monotonSchema = ScalaReflection.schemaFor[Monoton].dataType.asInstanceOf[StructType]
 
     import spark.implicits._
 
     val path = this.getClass.getResource("monoton.json").getPath
-    val monotonDF = spark.read.schema(monotonSchema).json(path).as[Monoton]
+    val monotonDF = spark.read.option("multiline", value = true).schema(experimentsSchema).json(path)
 
-    val count = monotonDF.map(a => a.analysis.size)
-    count.show()
-    monotonDF.printSchema()
+    val monotonDf = monotonDF.select(explode($"experiments").as("exp"))
+      .withColumn("name", $"exp.name")
+      .withColumn("analysis", $"exp.analysis")
+      .drop("exp")
+
+    val avgerage = udf((xs: Seq[Double]) => xs.sum / xs.size)
+    val modeDf = monotonDf.select(
+      $"name",
+      array_max($"analysis.avgErrorTime").as("avgErrorTimeMax"),
+      array_min($"analysis.avgErrorTime").as("avgErrorTimeMin"),
+      avgerage($"analysis.avgErrorTime").as("avgErrorTimesAvg"),
+      array_max($"analysis.preErrorTime").as("preErrorTimeMax"),
+      array_min($"analysis.preErrorTime").as("preErrorTimeMin"),
+      avgerage($"analysis.preErrorTime").as("preErrorTimeAvg")
+    )
+
+    modeDf.printSchema()
+    modeDf.show()
+
   }
 }
