@@ -1,28 +1,17 @@
+import BatchJob._
 import Models.{mode, _}
-import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.functions._
 import vegas._
 import vegas.sparkExt._
 
-object Application {
+object Lab2Monoton {
 
   def main(args: Array[String]): Unit = {
-    val spark = SparkSession
-      .builder()
-      .master("local[*]")
-      .config("spark.sql.warehouse.dir", "./target")
-      .config("spark.broadcast.compress", value = false)
-      .config("spark.shuffle.compress", value = false)
-      .config("spark.shuffle.spill.compress",value = false)
-      .appName("Testing Spark Session")
-      .getOrCreate()
 
-    spark.sparkContext.setLogLevel("ERROR")
-
-    import spark.implicits._
+    import sparkSession.implicits._
 
     val path = this.getClass.getResource("monoton.json").getPath
-    val monotonDF = spark.read.option("multiline", value = true).schema(experimentsSchema).json(path)
+    val monotonDF = sparkSession.read.option("multiline", value = true).schema(experimentsSchema).json(path)
 
     val monotonDf = monotonDF.select(explode($"experiments").as("exp"))
       .withColumn("name", $"exp.name")
@@ -63,7 +52,6 @@ object Application {
 
     plot.show
 
-    spark.stop()
   }
 
 }
