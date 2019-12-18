@@ -1,4 +1,4 @@
-import Models._
+import Models.{mode, _}
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.functions._
 
@@ -25,19 +25,30 @@ object Application {
       .withColumn("analysis", $"exp.analysis")
       .drop("exp")
 
-    val avgerage = udf((xs: Seq[Double]) => xs.sum / xs.size)
-    val modeDf = monotonDf.select(
+    val avgErrorTimesDf = monotonDf.select(
       $"name",
+      count1($"analysis.skippedReactions").as("skippedReactionsCount"),
+      count1($"analysis.excessReactions").as("excessReactionsCount"),
       array_max($"analysis.avgErrorTime").as("avgErrorTimeMax"),
       array_min($"analysis.avgErrorTime").as("avgErrorTimeMin"),
       avgerage($"analysis.avgErrorTime").as("avgErrorTimesAvg"),
+      mode($"analysis.avgErrorTime").as("avgErrorTimeMode"),
+      median($"analysis.avgErrorTime").as("avgErrorTimeMedian"),
+    ).withColumn("avgErrorTimeRange", $"avgErrorTimeMax" - $"avgErrorTimeMin")
+
+    val preErrorTimesDf = monotonDf.select(
+      $"name",
+      count1($"analysis.skippedReactions").as("skippedReactionsCount"),
+      count1($"analysis.excessReactions").as("excessReactionsCount"),
       array_max($"analysis.preErrorTime").as("preErrorTimeMax"),
       array_min($"analysis.preErrorTime").as("preErrorTimeMin"),
-      avgerage($"analysis.preErrorTime").as("preErrorTimeAvg")
-    )
+      avgerage($"analysis.preErrorTime").as("preErrorTimeAvg"),
+      mode($"analysis.preErrorTime").as("preErrorTimeMode"),
+      median($"analysis.preErrorTime").as("preErrorTimeMedian")
+    ).withColumn("preErrorTimeRange", $"preErrorTimeMax" - $"preErrorTimeMin")
 
-    modeDf.printSchema()
-    modeDf.show()
+    avgErrorTimesDf.show()
+    preErrorTimesDf.show()
 
   }
 }
