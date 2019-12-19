@@ -12,29 +12,29 @@ object Models {
 
   val experimentsSchema = ScalaReflection.schemaFor[Experiments].dataType.asInstanceOf[StructType]
 
-  //    Manual schema
-  //    val analysisSchema = StructType(
-  //      Seq[StructField](
-  //        StructField("minutes", IntegerType),
-  //        StructField("skippedReactions", IntegerType),
-  //        StructField("excessReactions", IntegerType),
-  //        StructField("avgErrorTime", DoubleType),
-  //        StructField("preErrorTime", DoubleType)
-  //      )
-  //    )
-  //
-  //    val experimentsSchema = StructType(
-  //      Seq[StructField](
-  //        StructField("name", StringType),
-  //        StructField("analysis", ArrayType(analysisSchema))
-  //      )
-  //    )
-  //
-  //    val mainSchema = StructType(
-  //      Seq[StructField](
-  //        StructField("experiments", ArrayType(experimentsSchema))
-  //      )
-  //    )
+//  Manual schema
+//  val analysisSchema = StructType(
+//    Seq[StructField](
+//      StructField("minutes", IntegerType),
+//      StructField("skippedReactions", IntegerType),
+//      StructField("excessReactions", IntegerType),
+//      StructField("avgErrorTime", DoubleType),
+//      StructField("preErrorTime", DoubleType)
+//    )
+//  )
+//
+//  val experimentsSchema = StructType(
+//    Seq[StructField](
+//      StructField("name", StringType),
+//      StructField("analysis", ArrayType(analysisSchema))
+//    )
+//  )
+//
+//  val mainSchema = StructType(
+//    Seq[StructField](
+//      StructField("experiments", ArrayType(experimentsSchema))
+//    )
+//  )
 
 //  Helper functions
   val count1 = udf((list: Seq[Int]) => list.count(_ == 1))
