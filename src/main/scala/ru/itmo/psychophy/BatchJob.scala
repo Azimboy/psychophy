@@ -1,8 +1,8 @@
+package ru.itmo.psychophy
+
 import org.apache.spark.sql.SparkSession
 
 object BatchJob {
-
-  val getFilePath = (fileName: String) => getClass.getResource(fileName).getPath
 
   val sparkSession = SparkSession
     .builder()

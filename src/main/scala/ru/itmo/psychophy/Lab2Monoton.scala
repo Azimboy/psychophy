@@ -1,8 +1,10 @@
-import BatchJob._
-import Models.{mode, _}
-import org.apache.spark.sql.functions._
-import vegas._
+package ru.itmo.psychophy
+
+import org.apache.spark.sql.functions.{array_max, array_min, explode}
+import ru.itmo.psychophy.BatchJob.sparkSession
+import ru.itmo.psychophy.Utils._
 import vegas.sparkExt._
+import vegas.{Bar, Nom, Quant, Vegas}
 
 object Lab2Monoton {
 
@@ -10,8 +12,10 @@ object Lab2Monoton {
 
     import sparkSession.implicits._
 
-    val path = this.getClass.getResource("monoton.json").getPath
-    val monotonDF = sparkSession.read.option("multiline", value = true).schema(experimentsSchema).json(path)
+    val monotonDF = sparkSession.read
+      .option("multiline", value = true)
+      .schema(experimentsSchema)
+      .json(getFilePath("monoton.json"))
 
     val monotonDf = monotonDF.select(explode($"experiments").as("exp"))
       .withColumn("name", $"exp.name")

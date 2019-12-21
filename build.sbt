@@ -6,6 +6,8 @@ scalaVersion := "2.11.8"
 
 val sparkVersion = "2.4.4"
 
+//resourceDirectory in Compile := baseDirectory.value / "resources"
+
 libraryDependencies ++= Seq(
   "org.apache.spark" % "spark-core_2.11" % sparkVersion,
   "org.apache.spark" % "spark-sql_2.11" % sparkVersion,
