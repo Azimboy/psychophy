@@ -1,23 +1,19 @@
 package ru.itmo.psychophy
 
 import org.apache.spark.sql.functions.{array_max, array_min, explode}
-import ru.itmo.psychophy.BatchJob.sparkSession
+import ru.itmo.psychophy.StartSession.{loadFromJson, sparkSession}
 import ru.itmo.psychophy.Utils._
 import vegas.sparkExt._
 import vegas.{Bar, Nom, Quant, Vegas}
 
-object Lab2Monoton {
+object Lab2GameProgramDataAnalysis {
 
   def main(args: Array[String]): Unit = {
 
     import sparkSession.implicits._
 
-    val monotonDF = sparkSession.read
-      .option("multiline", value = true)
-      .schema(experimentsSchema)
-      .json(getFilePath("monoton.json"))
-
-    val monotonDf = monotonDF.select(explode($"experiments").as("exp"))
+    val monotonDf = loadFromJson("monoton.json")
+      .select(explode($"experiments").as("exp"))
       .withColumn("name", $"exp.name")
       .withColumn("analysis", $"exp.analysis")
       .drop("exp")

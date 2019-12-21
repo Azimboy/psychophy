@@ -4,8 +4,6 @@ import org.apache.spark.sql.functions.udf
 
 object Utils {
 
-  val getFilePath = (fileName: String) => getClass.getClassLoader.getResource(fileName).getPath
-
   val count1 = udf((list: Seq[Int]) => list.count(_ == 1))
 
   val avgerage = udf((list: Seq[Double]) => list.sum / list.size)
