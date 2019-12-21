@@ -4,11 +4,7 @@ import org.apache.spark.sql.functions.udf
 
 object Utils {
 
-  val getFilePath = (fileName: String) => {
-//    TODO fix resources path issue
-//    val aa= getClass.getClassLoader.getResource(fileName).getPath
-    "src/main/resources/ru.itmo.psychophy/" + fileName
-  }
+  val getFilePath = (fileName: String) => getClass.getClassLoader.getResource(fileName).getPath
 
   val count1 = udf((list: Seq[Int]) => list.count(_ == 1))
 
