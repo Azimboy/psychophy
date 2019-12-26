@@ -1,6 +1,6 @@
 package ru.itmo.psychophy
 
-import org.apache.spark.sql.types.{DoubleType, IntegerType}
+import org.apache.spark.sql.types.{DoubleType, IntegerType, StructType}
 import org.apache.spark.sql.{DataFrame, SparkSession}
 
 object StartSession {
@@ -21,10 +21,10 @@ object StartSession {
 
   val getFilePath = (fileName: String) => getClass.getClassLoader.getResource(fileName).getPath
 
-  def loadFromJson(fileName: String): DataFrame = {
+  def loadFromJson(fileName: String, struct: StructType = experimentsSchema): DataFrame = {
     sparkSession.read
       .option("multiline", value = true)
-      .schema(experimentsSchema)
+      .schema(struct)
       .json(getFilePath(fileName))
   }
 
@@ -39,4 +39,12 @@ object StartSession {
       .withColumn("sdnn", 'sdnn.cast(IntegerType))
   }
 
+  def saveToCsv(dataFrame: DataFrame, filePath: String) = {
+    dataFrame.coalesce(1)
+      .write
+      .option("header","true")
+      .option("sep",",")
+      .mode("overwrite")
+      .csv(s"src/main/resources/$filePath")
+  }
 }

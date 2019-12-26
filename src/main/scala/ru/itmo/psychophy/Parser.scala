@@ -6,7 +6,7 @@ object Parser {
 
   def main(args: Array[String]): Unit = {
     val rom = sparkSession.read
-      .csv(getFilePath("PEN_EKG.csv"))
+      .csv(getFilePath("lab3/PEN_EKG.csv"))
 
     rom.printSchema()
     import sparkSession.implicits._
