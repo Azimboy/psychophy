@@ -1,0 +1,4 @@
+"name","level","avgErrorTimeMin1","avgErrorTimeMin2","avgErrorTimeMin3","avgErrorTimeMax1","avgErrorTimeMax2","avgErrorTimeMax3"
+"Abykev",3,0.63,0.44,1.68,1.19,2.26,3.67
+"Andreev",6,2.47,1.95,3.31,4.06,9.37,17.35
+"Lukyansev",13,0.7,0.45,2.06,2.11,6.54,21.45
