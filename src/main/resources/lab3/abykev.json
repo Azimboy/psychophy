@@ -1,0 +1,53 @@
+[
+  {
+    "avgPres1": 12,
+    "avgPres2": 14,
+    "avgPres3": 9,
+    "avgSkip1": 0,
+    "avgSkip2": 0.33,
+    "avgSkip3": 0.33,
+    "avgExсess1": 0,
+    "avgExсess2": 0,
+    "avgExсess3": 0,
+    "avgErrorTime1": 1.19,
+    "avgErrorTime2": 0.44,
+    "avgErrorTime3": 1.68,
+    "avgPredom1": 1.1,
+    "avgPredom2": 0.37,
+    "avgPredom3": 0.9
+  },
+  {
+    "avgPres1": 13,
+    "avgPres2": 16,
+    "avgPres3": 10,
+    "avgSkip1": 0,
+    "avgSkip2": 0.67,
+    "avgSkip3": 0,
+    "avgExсess1": 0,
+    "avgExсess2": 0,
+    "avgExсess3": 0,
+    "avgErrorTime1": 1.01,
+    "avgErrorTime2": 1.25,
+    "avgErrorTime3": 2.14,
+    "avgPredom1": 0.9,
+    "avgPredom2": 0.72,
+    "avgPredom3": 0.6
+  },
+  {
+    "avgPres1": 14,
+    "avgPres2": 17,
+    "avgPres3": 11,
+    "avgSkip1": 0.33,
+    "avgSkip2": 1,
+    "avgSkip3": 1.7,
+    "avgExсess1": 0,
+    "avgExсess2": 0,
+    "avgExсess3": 0.33,
+    "avgErrorTime1": 0.63,
+    "avgErrorTime2": 2.26,
+    "avgErrorTime3": 3.67,
+    "avgPredom1": 0.55,
+    "avgPredom2": 0.95,
+    "avgPredom3": 0.88
+  }
+]

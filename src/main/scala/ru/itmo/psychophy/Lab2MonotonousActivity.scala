@@ -9,7 +9,7 @@ object Lab2MonotonousActivity {
   def main(args: Array[String]): Unit = {
     import sparkSession.implicits._
 
-    val monotonBeforeDs = loadFromCsv("monoton_after.csv")
+    val monotonBeforeDs = loadFromCsv("lab2/monoton_after.csv")
       .groupBy($"levelFs").agg(
       count("levelFs").as("countLevelFs"),
       collect_list($"fullName").as("names"),
@@ -24,7 +24,7 @@ object Lab2MonotonousActivity {
       .withColumn("medianMarkFs", median($"markFsList"))
       .sort($"levelFs")
 
-    val monotonAfterDs = loadFromCsv("monoton_before.csv")
+    val monotonAfterDs = loadFromCsv("lab2/monoton_before.csv")
       .groupBy($"levelFs").agg(
       count("levelFs").as("countLevelFs"),
       collect_list($"fullName").as("names"),

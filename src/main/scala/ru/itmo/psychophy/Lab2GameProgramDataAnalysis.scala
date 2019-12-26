@@ -12,7 +12,7 @@ object Lab2GameProgramDataAnalysis {
 
     import sparkSession.implicits._
 
-    val monotonDf = loadFromJson("monoton.json")
+    val monotonDf = loadFromJson("lab2/monoton.json")
       .select(explode($"experiments").as("exp"))
       .withColumn("name", $"exp.name")
       .withColumn("analysis", $"exp.analysis")

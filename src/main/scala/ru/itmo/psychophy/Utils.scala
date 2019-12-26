@@ -15,4 +15,9 @@ object Utils {
       if (list.size % 2 == 0) (lower.last + upper.head) / 2.0 else upper.head
     })
 
+  val stringify = udf((vs: Seq[String]) => vs match {
+    case null => null
+    case _    => s"""[${vs.map(_.split(" ").head).mkString(", ")}]"""
+  })
+
 }

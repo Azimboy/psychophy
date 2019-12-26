@@ -9,7 +9,7 @@ object Lab1PsychoemotionalStress {
   def main(args: Array[String]): Unit = {
     import sparkSession.implicits._
 
-    val psyStressBeforeDs = loadFromCsv("psy_stress_after.csv")
+    val psyStressBeforeDs = loadFromCsv("lab1/psy_stress_after.csv")
       .groupBy($"levelFs").agg(
       count("levelFs").as("countLevelFs"),
       collect_list($"fullName").as("names"),
@@ -20,11 +20,14 @@ object Lab1PsychoemotionalStress {
       avg($"sdnn").as("avgSdnn"),
       collect_list($"markFs").as("markFsList")
     )
+      .withColumn("participants", stringify($"names"))
       .withColumn("modeMarkFs", mode($"markFsList"))
       .withColumn("medianMarkFs", median($"markFsList"))
+      .drop($"names")
+      .drop($"markFsList")
       .sort($"levelFs")
 
-    val psyStressAfterDs = loadFromCsv("psy_stress_before.csv")
+    val psyStressAfterDs = loadFromCsv("lab1/psy_stress_before.csv")
       .groupBy($"levelFs").agg(
       count("levelFs").as("countLevelFs"),
       collect_list($"fullName").as("names"),
@@ -35,12 +38,22 @@ object Lab1PsychoemotionalStress {
       avg($"sdnn").as("avgSdnn"),
       collect_list($"markFs").as("markFsList")
     )
+      .withColumn("participants", stringify($"names"))
       .withColumn("modeMarkFs", mode($"markFsList"))
       .withColumn("medianMarkFs", median($"markFsList"))
+      .drop($"names")
+      .drop($"markFsList")
       .sort($"levelFs")
 
     psyStressBeforeDs.show()
     psyStressAfterDs.show()
+
+    psyStressBeforeDs.coalesce(1)
+      .write
+      .option("header","true")
+      .option("sep",",")
+      .mode("overwrite")
+      .csv("src/main/resources/output")
   }
 
 }
